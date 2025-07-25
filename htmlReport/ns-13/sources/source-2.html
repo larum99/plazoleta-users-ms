@@ -1,0 +1,178 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > UserEntityMapperImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.plazoleta.users.users.infrastructure.mappers</a>
+</div>
+
+<h1>Coverage Summary for Class: UserEntityMapperImpl (com.plazoleta.users.users.infrastructure.mappers)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">UserEntityMapperImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/29)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.plazoleta.users.users.infrastructure.mappers;
+&nbsp;
+&nbsp;import com.plazoleta.users.users.domain.model.UserModel;
+&nbsp;import com.plazoleta.users.users.domain.utils.Role;
+&nbsp;import com.plazoleta.users.users.infrastructure.entities.UserEntity;
+&nbsp;import javax.annotation.processing.Generated;
+&nbsp;import org.springframework.stereotype.Component;
+&nbsp;
+&nbsp;@Generated(
+&nbsp;    value = &quot;org.mapstruct.ap.MappingProcessor&quot;,
+&nbsp;    date = &quot;2025-07-24T13:36:40-0500&quot;,
+&nbsp;    comments = &quot;version: 1.6.3, compiler: IncrementalProcessingEnvironment from gradle-language-java-8.14.3.jar, environment: Java 17.0.15 (Microsoft)&quot;
+&nbsp;)
+&nbsp;@Component
+<b class="nc">&nbsp;public class UserEntityMapperImpl implements UserEntityMapper {</b>
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public UserModel entityToModel(UserEntity userEntity) {
+<b class="nc">&nbsp;        if ( userEntity == null ) {</b>
+<b class="nc">&nbsp;            return null;</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        UserModel userModel = new UserModel();</b>
+&nbsp;
+<b class="nc">&nbsp;        userModel.setId( userEntity.getId() );</b>
+<b class="nc">&nbsp;        userModel.setFirstName( userEntity.getFirstName() );</b>
+<b class="nc">&nbsp;        userModel.setLastName( userEntity.getLastName() );</b>
+<b class="nc">&nbsp;        userModel.setIdentityDocument( userEntity.getIdentityDocument() );</b>
+<b class="nc">&nbsp;        userModel.setPhoneNumber( userEntity.getPhoneNumber() );</b>
+<b class="nc">&nbsp;        userModel.setBirthDate( userEntity.getBirthDate() );</b>
+<b class="nc">&nbsp;        userModel.setEmail( userEntity.getEmail() );</b>
+<b class="nc">&nbsp;        userModel.setPassword( userEntity.getPassword() );</b>
+<b class="nc">&nbsp;        if ( userEntity.getRole() != null ) {</b>
+<b class="nc">&nbsp;            userModel.setRole( Enum.valueOf( Role.class, userEntity.getRole() ) );</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        return userModel;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public UserEntity modelToEntity(UserModel userModel) {
+<b class="nc">&nbsp;        if ( userModel == null ) {</b>
+<b class="nc">&nbsp;            return null;</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        UserEntity userEntity = new UserEntity();</b>
+&nbsp;
+<b class="nc">&nbsp;        userEntity.setId( userModel.getId() );</b>
+<b class="nc">&nbsp;        userEntity.setFirstName( userModel.getFirstName() );</b>
+<b class="nc">&nbsp;        userEntity.setLastName( userModel.getLastName() );</b>
+<b class="nc">&nbsp;        userEntity.setIdentityDocument( userModel.getIdentityDocument() );</b>
+<b class="nc">&nbsp;        userEntity.setPhoneNumber( userModel.getPhoneNumber() );</b>
+<b class="nc">&nbsp;        userEntity.setBirthDate( userModel.getBirthDate() );</b>
+<b class="nc">&nbsp;        userEntity.setEmail( userModel.getEmail() );</b>
+<b class="nc">&nbsp;        userEntity.setPassword( userModel.getPassword() );</b>
+<b class="nc">&nbsp;        if ( userModel.getRole() != null ) {</b>
+<b class="nc">&nbsp;            userEntity.setRole( userModel.getRole().name() );</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        return userEntity;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-07-24 15:51</div>
+</div>
+</body>
+</html>
