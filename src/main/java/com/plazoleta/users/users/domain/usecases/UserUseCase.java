@@ -1,29 +1,33 @@
 package com.plazoleta.users.users.domain.usecases;
 
 import com.plazoleta.users.users.domain.exceptions.*;
+import com.plazoleta.users.users.domain.model.RoleModel;
 import com.plazoleta.users.users.domain.model.UserModel;
 import com.plazoleta.users.users.domain.ports.in.UserServicePort;
 import com.plazoleta.users.users.domain.ports.out.PasswordEncoderPort;
+import com.plazoleta.users.users.domain.ports.out.RolePersistencePort;
 import com.plazoleta.users.users.domain.ports.out.UserPersistencePort;
 import com.plazoleta.users.users.domain.utils.DomainConstants;
 import com.plazoleta.users.users.domain.utils.RegexUtils;
-import com.plazoleta.users.users.domain.utils.Role;
 
 import java.time.LocalDate;
 import java.time.Period;
 
 public class UserUseCase implements UserServicePort {
-
     private final UserPersistencePort userPersistencePort;
     private final PasswordEncoderPort passwordEncoderPort;
+    private final RolePersistencePort rolePersistencePort;
 
-    public UserUseCase(UserPersistencePort userPersistencePort, PasswordEncoderPort passwordEncoderPort) {
+    public UserUseCase(UserPersistencePort userPersistencePort,
+                       PasswordEncoderPort passwordEncoderPort,
+                       RolePersistencePort rolePersistencePort) {
         this.userPersistencePort = userPersistencePort;
         this.passwordEncoderPort = passwordEncoderPort;
+        this.rolePersistencePort = rolePersistencePort;
     }
 
     @Override
-    public void registerUser(UserModel userModel, String roleFromRequest) {
+    public void registerUser(UserModel userModel) {
         normalizeStringFields(userModel);
 
         validateMandatoryFields(userModel);
@@ -38,21 +42,24 @@ public class UserUseCase implements UserServicePort {
         String encryptedPassword = passwordEncoderPort.encode(userModel.getPassword());
         userModel.setPassword(encryptedPassword);
 
-        if (roleFromRequest != null && !roleFromRequest.trim().isEmpty()) {
-            userModel.setRole(validateAndConvertRole(roleFromRequest));
+        RoleModel role;
+        if (userModel.getRole() != null && userModel.getRole().getId() != null) {
+            role = rolePersistencePort.findById(userModel.getRole().getId());
+            if (role == null) throw new InvalidRoleException();
         } else {
-            userModel.setRole(Role.PROPIETARIO);
+            role = validateAndConvertRole("PROPIETARIO");
         }
+        userModel.setRole(role);
 
         userPersistencePort.saveUser(userModel);
     }
 
-    private Role validateAndConvertRole(String roleFromRequest) {
-        try {
-            return Role.valueOf(roleFromRequest.trim().toUpperCase());
-        } catch (IllegalArgumentException ex) {
+    private RoleModel validateAndConvertRole(String roleName) {
+        RoleModel role = rolePersistencePort.findByName(roleName.trim().toUpperCase());
+        if (role == null) {
             throw new InvalidRoleException();
         }
+        return role;
     }
 
     private void normalizeStringFields(UserModel userModel) {
@@ -81,7 +88,6 @@ public class UserUseCase implements UserServicePort {
     private boolean isBlank(String value) {
         return value == null || value.trim().isEmpty();
     }
-
 
     private void validateEmail(String email) {
         if (!RegexUtils.EMAIL_PATTERN.matcher(email).matches()) {

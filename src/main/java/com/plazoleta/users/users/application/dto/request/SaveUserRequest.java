@@ -10,6 +10,6 @@ public record SaveUserRequest(
         LocalDate birthDate,
         String email,
         String password,
-        String role
+        Long roleId
 ) {
 }

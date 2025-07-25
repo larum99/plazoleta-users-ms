@@ -22,9 +22,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public SaveUserResponse save(SaveUserRequest request) {
         UserModel userModel = userDtoMapper.requestToModel(request);
-        String role = request.role();
-        userServicePort.registerUser(userModel, role);
+        userServicePort.registerUser(userModel);
         return new SaveUserResponse(Constants.SAVE_USER_RESPONSE_MESSAGE, LocalDateTime.now());
     }
-
 }
