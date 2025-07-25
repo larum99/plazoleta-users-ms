@@ -1,0 +1,241 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > UserUseCase</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.plazoleta.users.users.domain.usecases</a>
+</div>
+
+<h1>Coverage Summary for Class: UserUseCase (com.plazoleta.users.users.domain.usecases)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">UserUseCase</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (13/13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    89.5%
+  </span>
+  <span class="absValue">
+    (34/38)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    96.7%
+  </span>
+  <span class="absValue">
+    (59/61)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.plazoleta.users.users.domain.usecases;
+&nbsp;
+&nbsp;import com.plazoleta.users.users.domain.exceptions.*;
+&nbsp;import com.plazoleta.users.users.domain.model.UserModel;
+&nbsp;import com.plazoleta.users.users.domain.ports.in.UserServicePort;
+&nbsp;import com.plazoleta.users.users.domain.ports.out.PasswordEncoderPort;
+&nbsp;import com.plazoleta.users.users.domain.ports.out.UserPersistencePort;
+&nbsp;import com.plazoleta.users.users.domain.utils.DomainConstants;
+&nbsp;import com.plazoleta.users.users.domain.utils.RegexUtils;
+&nbsp;import com.plazoleta.users.users.domain.utils.Role;
+&nbsp;
+&nbsp;import java.time.LocalDate;
+&nbsp;import java.time.Period;
+&nbsp;
+&nbsp;public class UserUseCase implements UserServicePort {
+&nbsp;
+&nbsp;    private final UserPersistencePort userPersistencePort;
+&nbsp;    private final PasswordEncoderPort passwordEncoderPort;
+&nbsp;
+<b class="fc">&nbsp;    public UserUseCase(UserPersistencePort userPersistencePort, PasswordEncoderPort passwordEncoderPort) {</b>
+<b class="fc">&nbsp;        this.userPersistencePort = userPersistencePort;</b>
+<b class="fc">&nbsp;        this.passwordEncoderPort = passwordEncoderPort;</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void registerUser(UserModel userModel, String roleFromRequest) {
+<b class="fc">&nbsp;        normalizeStringFields(userModel);</b>
+&nbsp;
+<b class="fc">&nbsp;        validateMandatoryFields(userModel);</b>
+<b class="fc">&nbsp;        validateEmail(userModel.getEmail());</b>
+<b class="fc">&nbsp;        validatePhone(userModel.getPhoneNumber());</b>
+<b class="fc">&nbsp;        validateDocument(userModel.getIdentityDocument());</b>
+<b class="fc">&nbsp;        validateAge(userModel.getBirthDate());</b>
+&nbsp;
+<b class="fc">&nbsp;        checkIfDocumentAlreadyExists(userModel.getIdentityDocument());</b>
+<b class="fc">&nbsp;        checkIfUserAlreadyExists(userModel.getEmail());</b>
+&nbsp;
+<b class="fc">&nbsp;        String encryptedPassword = passwordEncoderPort.encode(userModel.getPassword());</b>
+<b class="fc">&nbsp;        userModel.setPassword(encryptedPassword);</b>
+&nbsp;
+<b class="pc">&nbsp;        if (roleFromRequest != null &amp;&amp; !roleFromRequest.trim().isEmpty()) {</b>
+<b class="fc">&nbsp;            userModel.setRole(validateAndConvertRole(roleFromRequest));</b>
+&nbsp;        } else {
+<b class="fc">&nbsp;            userModel.setRole(Role.PROPIETARIO);</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        userPersistencePort.saveUser(userModel);</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    private Role validateAndConvertRole(String roleFromRequest) {
+&nbsp;        try {
+<b class="fc">&nbsp;            return Role.valueOf(roleFromRequest.trim().toUpperCase());</b>
+<b class="nc">&nbsp;        } catch (IllegalArgumentException ex) {</b>
+<b class="nc">&nbsp;            throw new InvalidRoleException();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private void normalizeStringFields(UserModel userModel) {
+<b class="fc">&nbsp;        userModel.setFirstName(safeTrim(userModel.getFirstName()));</b>
+<b class="fc">&nbsp;        userModel.setLastName(safeTrim(userModel.getLastName()));</b>
+<b class="fc">&nbsp;        userModel.setIdentityDocument(safeTrim(userModel.getIdentityDocument()));</b>
+<b class="fc">&nbsp;        userModel.setPhoneNumber(safeTrim(userModel.getPhoneNumber()));</b>
+<b class="fc">&nbsp;        userModel.setEmail(safeTrim(userModel.getEmail()));</b>
+<b class="fc">&nbsp;        userModel.setPassword(safeTrim(userModel.getPassword()));</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    private String safeTrim(String value) {
+<b class="fc">&nbsp;        return value == null ? null : value.trim();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void validateMandatoryFields(UserModel userModel) {
+<b class="fc">&nbsp;        if (isBlank(userModel.getFirstName())) throw new MissingFieldException(DomainConstants.ERROR_REQUIRED_FIRSTNAME);</b>
+<b class="fc">&nbsp;        if (isBlank(userModel.getLastName())) throw new MissingFieldException(DomainConstants.ERROR_REQUIRED_LASTNAME);</b>
+<b class="pc">&nbsp;        if (isBlank(userModel.getIdentityDocument())) throw new MissingFieldException(DomainConstants.ERROR_REQUIRED_DOCUMENT);</b>
+<b class="pc">&nbsp;        if (isBlank(userModel.getPhoneNumber())) throw new MissingFieldException(DomainConstants.ERROR_REQUIRED_PHONE);</b>
+<b class="fc">&nbsp;        if (userModel.getBirthDate() == null) throw new MissingFieldException(DomainConstants.ERROR_REQUIRED_BIRTHDATE);</b>
+<b class="pc">&nbsp;        if (isBlank(userModel.getEmail())) throw new MissingFieldException(DomainConstants.ERROR_REQUIRED_EMAIL);</b>
+<b class="fc">&nbsp;        if (isBlank(userModel.getPassword())) throw new MissingFieldException(DomainConstants.ERROR_REQUIRED_PASSWORD);</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    private boolean isBlank(String value) {
+<b class="fc">&nbsp;        return value == null || value.trim().isEmpty();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    private void validateEmail(String email) {
+<b class="fc">&nbsp;        if (!RegexUtils.EMAIL_PATTERN.matcher(email).matches()) {</b>
+<b class="fc">&nbsp;            throw new InvalidEmailException();</b>
+&nbsp;        }
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    private void validatePhone(String phone) {
+<b class="fc">&nbsp;        if (phone.length() &gt; DomainConstants.PHONE_MAX_LENGTH ||</b>
+<b class="fc">&nbsp;                !RegexUtils.PHONE_PATTERN.matcher(phone).matches()) {</b>
+<b class="fc">&nbsp;            throw new InvalidPhoneException();</b>
+&nbsp;        }
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    private void validateDocument(String document) {
+<b class="fc">&nbsp;        if (!RegexUtils.DOCUMENT_PATTERN.matcher(document).matches()) {</b>
+<b class="fc">&nbsp;            throw new InvalidDocumentException();</b>
+&nbsp;        }
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    private void validateAge(LocalDate birthDate) {
+<b class="fc">&nbsp;        int age = Period.between(birthDate, LocalDate.now()).getYears();</b>
+<b class="fc">&nbsp;        if (age &lt; DomainConstants.MIN_AGE) {</b>
+<b class="fc">&nbsp;            throw new UnderAgeUserException();</b>
+&nbsp;        }
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    private void checkIfDocumentAlreadyExists(String identityDocument) {
+<b class="fc">&nbsp;        UserModel existingUser = userPersistencePort.getUserByDocument(identityDocument);</b>
+<b class="fc">&nbsp;        if (existingUser != null) {</b>
+<b class="fc">&nbsp;            throw new DuplicateDocumentException();</b>
+&nbsp;        }
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    private void checkIfUserAlreadyExists(String email) {
+<b class="fc">&nbsp;        UserModel existingUser = userPersistencePort.getUserByEmail(email);</b>
+<b class="fc">&nbsp;        if (existingUser != null) {</b>
+<b class="fc">&nbsp;            throw new UserAlreadyExistsException();</b>
+&nbsp;        }
+<b class="fc">&nbsp;    }</b>
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-07-24 15:51</div>
+</div>
+</body>
+</html>
