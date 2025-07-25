@@ -5,5 +5,5 @@ public class Constants {
         throw new IllegalStateException("Utility class");
     }
 
-    public static final String SAVE_USER_RESPONSE_MESSAGE = "User created successfully.";
+    public static final String SAVE_USER_RESPONSE_MESSAGE = "Usuario creado exitosamente.";
 }

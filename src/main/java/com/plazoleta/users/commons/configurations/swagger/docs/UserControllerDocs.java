@@ -31,7 +31,7 @@ public class UserControllerDocs {
                             schema = @Schema(implementation = SaveUserRequest.class),
                             examples = @ExampleObject(
                                     name = "Ejemplo de solicitud de creación",
-                                    summary = "Solicitud de ejemplo",
+                                    summary = "Creación de usuario",
                                     value = UserSwaggerExamples.CREATE_USER_REQUEST
                             )
                     )
