@@ -9,13 +9,11 @@ public class DomainConstants {
     public static final int PHONE_MAX_LENGTH = 13;
     public static final int MIN_AGE = 18;
 
-    public static final String ERROR_REQUIRED_FIRSTNAME = "First name is required.";
-    public static final String ERROR_REQUIRED_LASTNAME = "Last name is required.";
-    public static final String ERROR_REQUIRED_DOCUMENT = "Document is required.";
-    public static final String ERROR_REQUIRED_PHONE = "Phone number is required.";
-    public static final String ERROR_REQUIRED_BIRTHDATE = "Birth date is required.";
-    public static final String ERROR_REQUIRED_EMAIL = "Email is required.";
-    public static final String ERROR_REQUIRED_PASSWORD = "Password is required.";
-
-    public static final Role ROLE_ADMIN = Role.ADMIN;
+    public static final String ERROR_REQUIRED_FIRSTNAME = "El nombre es obligatorio.";
+    public static final String ERROR_REQUIRED_LASTNAME = "El apellido es obligatorio.";
+    public static final String ERROR_REQUIRED_DOCUMENT = "El documento es obligatorio.";
+    public static final String ERROR_REQUIRED_PHONE = "El número de teléfono es obligatorio.";
+    public static final String ERROR_REQUIRED_BIRTHDATE = "La fecha de nacimiento es obligatoria.";
+    public static final String ERROR_REQUIRED_EMAIL = "El correo electrónico es obligatorio.";
+    public static final String ERROR_REQUIRED_PASSWORD = "La contraseña es obligatoria.";
 }
