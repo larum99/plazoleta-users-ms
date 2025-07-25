@@ -6,13 +6,14 @@ import org.mapstruct.Mapper;
 
 import java.util.Optional;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = RoleEntityMapper.class)
 public interface UserEntityMapper {
 
     UserModel entityToModel(UserEntity userEntity);
     UserEntity modelToEntity(UserModel userModel);
 
     default UserModel optionalEntityToModel(Optional<UserEntity> optionalEntity) {
-        return optionalEntity.orElse(null) == null ? null : entityToModel(optionalEntity.get());
+        return optionalEntity.map(this::entityToModel).orElse(null);
     }
 }
+

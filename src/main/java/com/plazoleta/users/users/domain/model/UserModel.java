@@ -1,7 +1,5 @@
 package com.plazoleta.users.users.domain.model;
 
-import com.plazoleta.users.users.domain.utils.Role;
-
 import java.time.LocalDate;
 
 public class UserModel {
@@ -14,13 +12,13 @@ public class UserModel {
     private LocalDate birthDate;
     private String email;
     private String password;
-    private Role role;
+    private RoleModel role;
 
     public UserModel() {
     }
 
     public UserModel(Long id, String firstName, String lastName, String identityDocument, String phoneNumber,
-                     LocalDate birthDate, String email, String password, Role role) {
+                     LocalDate birthDate, String email, String password, RoleModel role) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -96,11 +94,11 @@ public class UserModel {
         this.password = password;
     }
 
-    public Role getRole() {
+    public RoleModel getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
+    public void setRole(RoleModel role) {
         this.role = role;
     }
 }
