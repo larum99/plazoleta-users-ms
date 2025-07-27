@@ -16,4 +16,6 @@ public class DomainConstants {
     public static final String ERROR_REQUIRED_BIRTHDATE = "La fecha de nacimiento es obligatoria.";
     public static final String ERROR_REQUIRED_EMAIL = "El correo electrónico es obligatorio.";
     public static final String ERROR_REQUIRED_PASSWORD = "La contraseña es obligatoria.";
+
+    public static final String OWNER = "PROPIETARIO";
 }

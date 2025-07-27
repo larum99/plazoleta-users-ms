@@ -3,6 +3,7 @@ package com.plazoleta.users.commons.configurations.swagger.docs;
 import com.plazoleta.users.commons.configurations.swagger.examples.UserSwaggerExamples;
 import com.plazoleta.users.users.application.dto.request.SaveUserRequest;
 import com.plazoleta.users.users.application.dto.response.SaveUserResponse;
+import com.plazoleta.users.users.application.dto.response.UserResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -62,4 +63,41 @@ public class UserControllerDocs {
     })
     public @interface CreateUserDocs {
     }
+
+    @Target({ElementType.METHOD})
+    @Retention(RetentionPolicy.RUNTIME)
+    @Operation(
+            summary = "Obtener usuario por ID",
+            description = "Este endpoint permite obtener los datos de un usuario registrado mediante su ID único."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Usuario encontrado exitosamente",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = UserResponse.class),
+                            examples = @ExampleObject(
+                                    name = "Respuesta exitosa",
+                                    summary = "Datos del usuario",
+                                    value = UserSwaggerExamples.USER_FOUND_RESPONSE
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Usuario no encontrado",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    name = "Error 404",
+                                    summary = "Usuario no encontrado",
+                                    value = UserSwaggerExamples.USER_NOT_FOUND_RESPONSE
+                            )
+                    )
+            )
+    })
+    public @interface GetUserByIdDocs {
+    }
+
 }

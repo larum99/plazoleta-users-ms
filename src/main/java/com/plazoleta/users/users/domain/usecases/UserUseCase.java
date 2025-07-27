@@ -47,7 +47,7 @@ public class UserUseCase implements UserServicePort {
             role = rolePersistencePort.findById(userModel.getRole().getId());
             if (role == null) throw new InvalidRoleException();
         } else {
-            role = validateAndConvertRole("PROPIETARIO");
+            role = validateAndConvertRole(DomainConstants.OWNER);
         }
         userModel.setRole(role);
 
@@ -127,5 +127,11 @@ public class UserUseCase implements UserServicePort {
         if (existingUser != null) {
             throw new UserAlreadyExistsException();
         }
+    }
+
+    @Override
+    public UserModel getUserById(Long id) {
+        return userPersistencePort.getUserById(id)
+                .orElseThrow(() -> new UserNotFoundException());
     }
 }
