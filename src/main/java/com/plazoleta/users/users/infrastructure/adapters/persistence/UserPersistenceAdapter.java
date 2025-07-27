@@ -36,4 +36,17 @@ public class UserPersistenceAdapter implements UserPersistencePort {
         Optional<UserEntity> entity = userRepository.findByIdentityDocument(identityDocument);
         return userEntityMapper.optionalEntityToModel(entity);
     }
+
+    @Override
+    public Optional<UserModel> getUserById(Long id) {
+        Optional<UserEntity> optionalUser = userRepository.findById(id);
+
+        if (optionalUser.isPresent()) {
+            UserEntity entity = optionalUser.get();
+            UserModel model = userEntityMapper.entityToModel(entity);
+            return Optional.of(model);
+        } else {
+            return Optional.empty();
+        }
+    }
 }

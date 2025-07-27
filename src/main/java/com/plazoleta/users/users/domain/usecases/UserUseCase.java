@@ -128,4 +128,10 @@ public class UserUseCase implements UserServicePort {
             throw new UserAlreadyExistsException();
         }
     }
+
+    @Override
+    public UserModel getUserById(Long id) {
+        return userPersistencePort.getUserById(id)
+                .orElseThrow(() -> new UserNotFoundException());
+    }
 }

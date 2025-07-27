@@ -59,4 +59,10 @@ public class ControllerAdvisor {
                 ExceptionConstants.INVALID_ROLE_MESSAGE, LocalDateTime.now()));
     }
 
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleUserNotFound(UserNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionResponse(
+                ex.getMessage() != null ? ex.getMessage() : ExceptionConstants.USER_NOT_FOUND_MESSAGE,
+                LocalDateTime.now()));
+    }
 }
