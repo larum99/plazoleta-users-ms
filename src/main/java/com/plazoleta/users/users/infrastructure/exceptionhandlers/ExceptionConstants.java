@@ -13,5 +13,6 @@ public class ExceptionConstants {
     public static final String USER_ALREADY_EMAIL_EXISTS_MESSAGE = "Ya existe un usuario con este correo electrónico.";
     public static final String USER_ALREADY_DOCUMENTID_EXISTS_MESSAGE = "Ya existe un usuario con este documento.";
     public static final String INVALID_ROLE_MESSAGE = "El rol proporcionado no es válido.";
+    public static final String USER_NOT_FOUND_MESSAGE = "El usuario con el ID proporcionado no fue encontrado.";
 }
 
