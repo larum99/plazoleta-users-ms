@@ -28,7 +28,7 @@ public class UserController {
     @CreateUserDocs
     @PostMapping(ControllerConstants.SAVE_PATH)
     public ResponseEntity<SaveUserResponse> saveUser(@RequestBody SaveUserRequest request) {
-        SaveUserResponse response = userService.save(request);
+        SaveUserResponse response = userService.saveUser(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
