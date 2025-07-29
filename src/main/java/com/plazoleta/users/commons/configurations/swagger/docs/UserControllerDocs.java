@@ -22,40 +22,44 @@ public class UserControllerDocs {
     @Target({ElementType.METHOD})
     @Retention(RetentionPolicy.RUNTIME)
     @Operation(
-            summary = "Crear un nuevo usuario en plazoleta",
-            description = "Este endpoint permite registrar un usuario en la plataforma de Plazoleta.",
+            summary = SwaggerConstants.SUMMARY_CREATE_USER,
+            description = SwaggerConstants.DESCRIPTION_CREATE_USER,
             requestBody = @RequestBody(
-                    description = "Datos necesarios para crear un usuario",
+                    description = SwaggerConstants.DESCRIPTION_CREATE_USER,
                     required = true,
                     content = @Content(
-                            mediaType = "application/json",
+                            mediaType = SwaggerConstants.APPLICATION_JSON,
                             schema = @Schema(implementation = SaveUserRequest.class),
                             examples = @ExampleObject(
-                                    name = "Ejemplo de solicitud de creación",
-                                    summary = "Creación de usuario",
+                                    name = SwaggerConstants.EXAMPLE_NAME_CREATE_REQUEST,
+                                    summary = SwaggerConstants.SUMMARY_CREATE_USER_EXAMPLE,
                                     value = UserSwaggerExamples.CREATE_USER_REQUEST
                             )
                     )
             )
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Usuario creado exitosamente",
+            @ApiResponse(
+                    responseCode = SwaggerConstants.OK,
+                    description = SwaggerConstants.DESCRIPTION_CREATE_USER_SUCCESS,
                     content = @Content(
-                            mediaType = "application/json",
+                            mediaType = SwaggerConstants.APPLICATION_JSON,
                             schema = @Schema(implementation = SaveUserResponse.class),
                             examples = @ExampleObject(
-                                    name = "Respuesta de éxito",
-                                    summary = "Usuario creado",
+                                    name = SwaggerConstants.EXAMPLE_NAME_SUCCESS,
+                                    summary = SwaggerConstants.SUMMARY_USER_CREATED,
                                     value = UserSwaggerExamples.USER_CREATED_RESPONSE
                             )
                     )
             ),
-            @ApiResponse(responseCode = "400", description = "Datos inválidos o usuario ya existente",
+            @ApiResponse(
+                    responseCode = SwaggerConstants.BAD_REQUEST,
+                    description = SwaggerConstants.DESCRIPTION_USER_ALREADY_EXISTS,
                     content = @Content(
-                            mediaType = "application/json",
+                            mediaType = SwaggerConstants.APPLICATION_JSON,
                             examples = @ExampleObject(
-                                    name = "Error de validación",
-                                    summary = "Email duplicado",
+                                    name = SwaggerConstants.EXAMPLE_NAME_VALIDATION_ERROR,
+                                    summary = SwaggerConstants.SUMMARY_DUPLICATED_EMAIL,
                                     value = UserSwaggerExamples.USER_ALREADY_EXISTS_RESPONSE
                             )
                     )
@@ -67,31 +71,31 @@ public class UserControllerDocs {
     @Target({ElementType.METHOD})
     @Retention(RetentionPolicy.RUNTIME)
     @Operation(
-            summary = "Obtener usuario por ID",
-            description = "Este endpoint permite obtener los datos de un usuario registrado mediante su ID único."
+            summary = SwaggerConstants.SUMMARY_GET_USER_BY_ID,
+            description = SwaggerConstants.DESCRIPTION_GET_USER_BY_ID
     )
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200",
-                    description = "Usuario encontrado exitosamente",
+                    responseCode = SwaggerConstants.CREATED,
+                    description = SwaggerConstants.DESCRIPTION_USER_FOUND,
                     content = @Content(
-                            mediaType = "application/json",
+                            mediaType = SwaggerConstants.APPLICATION_JSON,
                             schema = @Schema(implementation = UserResponse.class),
                             examples = @ExampleObject(
-                                    name = "Respuesta exitosa",
-                                    summary = "Datos del usuario",
+                                    name = SwaggerConstants.EXAMPLE_NAME_SUCCESS,
+                                    summary = SwaggerConstants.SUMMARY_USER_DATA,
                                     value = UserSwaggerExamples.USER_FOUND_RESPONSE
                             )
                     )
             ),
             @ApiResponse(
-                    responseCode = "404",
-                    description = "Usuario no encontrado",
+                    responseCode = SwaggerConstants.NOT_FOUND,
+                    description = SwaggerConstants.DESCRIPTION_USER_NOT_FOUND,
                     content = @Content(
-                            mediaType = "application/json",
+                            mediaType = SwaggerConstants.APPLICATION_JSON,
                             examples = @ExampleObject(
-                                    name = "Error 404",
-                                    summary = "Usuario no encontrado",
+                                    name = SwaggerConstants.EXAMPLE_NAME_NOT_FOUND,
+                                    summary = SwaggerConstants.SUMMARY_USER_NOT_FOUND,
                                     value = UserSwaggerExamples.USER_NOT_FOUND_RESPONSE
                             )
                     )
@@ -99,5 +103,4 @@ public class UserControllerDocs {
     })
     public @interface GetUserByIdDocs {
     }
-
 }

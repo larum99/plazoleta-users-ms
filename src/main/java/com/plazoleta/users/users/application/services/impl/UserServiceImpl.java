@@ -20,7 +20,7 @@ public class UserServiceImpl implements UserService {
     private final UserDtoMapper userDtoMapper;
 
     @Override
-    public SaveUserResponse save(SaveUserRequest request) {
+    public SaveUserResponse saveUser(SaveUserRequest request) {
         UserModel userModel = userDtoMapper.requestToModel(request);
         userServicePort.registerUser(userModel);
         return new SaveUserResponse(Constants.SAVE_USER_RESPONSE_MESSAGE, LocalDateTime.now());

@@ -4,5 +4,5 @@ import com.plazoleta.users.users.application.dto.request.SaveUserRequest;
 import com.plazoleta.users.users.application.dto.response.SaveUserResponse;
 
 public interface UserService {
-    SaveUserResponse save(SaveUserRequest request);
+    SaveUserResponse saveUser(SaveUserRequest request);
 }

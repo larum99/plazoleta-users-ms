@@ -15,7 +15,7 @@ public class UserSwaggerExamples {
           "birthDate": "1995-11-20",
           "email": "carlos.ramirez@plazoleta.com",
           "password": "miContraseñaSegura123",
-          "role": "ADMIN"
+          "roleId": 1
         }
     """;
 
