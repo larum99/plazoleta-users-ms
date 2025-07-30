@@ -9,6 +9,7 @@ import com.plazoleta.users.users.domain.ports.out.RolePersistencePort;
 import com.plazoleta.users.users.domain.ports.out.UserPersistencePort;
 
 public class UserUseCase implements UserServicePort {
+
     private final UserPersistencePort userPersistencePort;
     private final PasswordEncoderPort passwordEncoderPort;
     private final RolePersistencePort rolePersistencePort;
@@ -22,7 +23,8 @@ public class UserUseCase implements UserServicePort {
     }
 
     @Override
-    public void registerUser(UserModel userModel) {
+    public void registerUser(UserModel userModel, String role) {
+        UserHelper.validateRoleIsAdmin(role);
         UserHelper.normalizeUser(userModel);
 
         UserHelper.validateMandatoryFields(userModel);
@@ -34,7 +36,7 @@ public class UserUseCase implements UserServicePort {
         UserHelper.checkIfDocumentExists(userModel.getIdentityDocument(), userPersistencePort);
         UserHelper.checkIfEmailExists(userModel.getEmail(), userPersistencePort);
 
-        UserHelper.validateAndAssignRole(userModel, rolePersistencePort);
+        UserHelper.assignOwnerRole(userModel, rolePersistencePort);
 
         String encryptedPassword = passwordEncoderPort.encode(userModel.getPassword());
         userModel.setPassword(encryptedPassword);
@@ -46,5 +48,25 @@ public class UserUseCase implements UserServicePort {
     public UserModel getUserById(Long id) {
         return userPersistencePort.getUserById(id)
                 .orElseThrow(UserNotFoundException::new);
+    }
+
+    @Override
+    public void createEmployeeByOwner(UserModel employee, Long ownerId, String role) {
+        UserHelper.validateRoleIsOwner(role);
+        UserHelper.validateMandatoryFields(employee);
+        UserHelper.validateEmail(employee.getEmail());
+        UserHelper.validatePhone(employee.getPhoneNumber());
+        UserHelper.validateDocument(employee.getIdentityDocument());
+        UserHelper.validateAge(employee.getBirthDate());
+
+        UserHelper.checkIfDocumentExists(employee.getIdentityDocument(), userPersistencePort);
+        UserHelper.checkIfEmailExists(employee.getEmail(), userPersistencePort);
+
+        UserHelper.assignEmployeeRole(employee, rolePersistencePort);
+
+        String encryptedPassword = passwordEncoderPort.encode(employee.getPassword());
+        employee.setPassword(encryptedPassword);
+
+        userPersistencePort.saveUser(employee);
     }
 }

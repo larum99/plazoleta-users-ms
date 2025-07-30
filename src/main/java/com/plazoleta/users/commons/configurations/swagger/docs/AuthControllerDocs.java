@@ -16,48 +16,54 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import static com.plazoleta.users.commons.configurations.swagger.docs.SwaggerConstants.*;
+
 public class AuthControllerDocs {
 
     @Target({ElementType.METHOD})
     @Retention(RetentionPolicy.RUNTIME)
     @Operation(
-            summary = "Autenticación de usuarios",
-            description = "Permite iniciar sesión a un usuario registrado para obtener su token JWT.",
+            summary = SUMMARY_LOGIN,
+            description = DESCRIPTION_LOGIN,
             requestBody = @RequestBody(
-                    description = "Credenciales del usuario",
+                    description = DESCRIPTION_CREDENTIALS,
                     required = true,
                     content = @Content(
-                            mediaType = "application/json",
+                            mediaType = APPLICATION_JSON,
                             schema = @Schema(implementation = AuthenticationRequest.class),
                             examples = @ExampleObject(
-                                    name = "Ejemplo de login",
-                                    summary = "Login exitoso",
-                                    description = "Petición de login enviando correo y contraseña",
+                                    name = EXAMPLE_NAME_REQUEST,
+                                    summary = SUMMARY_REQUEST_EXAMPLE,
+                                    description = DESCRIPTION_REQUEST_EXAMPLE,
                                     value = AuthenticationSwaggerExamples.AUTHENTICATION_REQUEST
                             )
                     )
             )
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Login exitoso",
+            @ApiResponse(
+                    responseCode = OK,
+                    description = RESPONSE_SUCCESS,
                     content = @Content(
-                            mediaType = "application/json",
+                            mediaType = APPLICATION_JSON,
                             schema = @Schema(implementation = AuthenticationResponse.class),
                             examples = @ExampleObject(
-                                    name = "Token generado",
-                                    summary = "Respuesta de login",
-                                    description = "Token JWT generado tras autenticarse",
+                                    name = EXAMPLE_NAME_SUCCESS_TOKEN,
+                                    summary = SUMMARY_RESPONSE_EXAMPLE,
+                                    description = DESCRIPTION_RESPONSE_EXAMPLE,
                                     value = AuthenticationSwaggerExamples.AUTHENTICATION_RESPONSE
                             )
                     )
             ),
-            @ApiResponse(responseCode = "401", description = "Credenciales inválidas",
+            @ApiResponse(
+                    responseCode = UNAUTHORIZED,
+                    description = RESPONSE_ERROR,
                     content = @Content(
-                            mediaType = "application/json",
+                            mediaType = APPLICATION_JSON,
                             examples = @ExampleObject(
-                                    name = "Error de autenticación",
-                                    summary = "Login fallido",
-                                    description = "Credenciales incorrectas",
+                                    name = EXAMPLE_NAME_ERROR,
+                                    summary = SUMMARY_ERROR_EXAMPLE,
+                                    description = DESCRIPTION_ERROR_EXAMPLE,
                                     value = AuthenticationSwaggerExamples.AUTHENTICATION_ERROR_RESPONSE
                             )
                     )

@@ -1,5 +1,6 @@
 package com.plazoleta.users.users.infrastructure.security.utils;
 
+import java.security.PublicKey;
 import java.util.List;
 
 public class SecurityConstants {
@@ -27,4 +28,13 @@ public class SecurityConstants {
 
     public static final List<String> ALLOWED_METHODS = List.of("GET", "POST", "PUT", "DELETE");
     public static final List<String> ALLOWED_HEADERS = List.of("*");
+
+    public static final String APPLICATION_JSON = "application/json";
+
+    public static final String ACCESS_DENIED_MESSAGE_TEMPLATE = """
+        {
+          "message": "Acceso denegado: no tienes los permisos necesarios.",
+          "timestamp": "%s"
+        }
+        """;
 }

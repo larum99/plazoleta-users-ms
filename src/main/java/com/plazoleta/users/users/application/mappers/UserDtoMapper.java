@@ -7,7 +7,6 @@ import org.mapstruct.*;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserDtoMapper {
-    @Mapping(target = "role.id", source = "roleId")
     UserModel requestToModel(SaveUserRequest saveUserRequest);
 
     @Mapping(source = "role.name", target = "role")

@@ -71,4 +71,17 @@ public class ControllerAdvisor {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ExceptionResponse(
                 ExceptionConstants.INVALID_CREDENTIALS_MESSAGE, LocalDateTime.now()));
     }
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<ExceptionResponse> handleForbidden(ForbiddenException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ExceptionResponse(
+                ExceptionConstants.FORBIDDEN_MESSAGE, LocalDateTime.now()));
+    }
+
+    @ExceptionHandler(RoleNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleRoleNotFound(RoleNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionResponse(
+                ExceptionConstants.ROLE_NOT_FOUND_MESSAGE, LocalDateTime.now()));
+    }
+
 }

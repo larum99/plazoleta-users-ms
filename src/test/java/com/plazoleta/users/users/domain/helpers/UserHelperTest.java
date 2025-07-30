@@ -5,9 +5,13 @@ import com.plazoleta.users.users.domain.model.RoleModel;
 import com.plazoleta.users.users.domain.model.UserModel;
 import com.plazoleta.users.users.domain.ports.out.RolePersistencePort;
 import com.plazoleta.users.users.domain.ports.out.UserPersistencePort;
+import com.plazoleta.users.users.domain.utils.DomainConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
@@ -24,6 +28,10 @@ class UserHelperTest {
     private RolePersistencePort rolePersistencePort;
 
     private UserModel user;
+    // Asumiendo los valores de DomainConstants para las pruebas
+    private static final String ROLE_ADMIN = "ADMINISTRADOR";
+    private static final String ROLE_OWNER = "PROPIETARIO";
+    private static final String ROLE_EMPLOYEE = "EMPLEADO";
 
     @BeforeEach
     void setUp() {
@@ -35,29 +43,41 @@ class UserHelperTest {
         user.setBirthDate(LocalDate.of(2000, 1, 1));
         user.setEmail("test@example.com");
         user.setPassword("password");
-        user.setRole(new RoleModel(1L, null, null));
     }
 
     @Test
     void normalizeUser_shouldTrimAllStringFields() {
+        // Arrange
         user.setFirstName("  John  ");
         user.setLastName("  Doe  ");
         user.setEmail("  john.doe@example.com  ");
+        user.setIdentityDocument("  112233  ");
+        user.setPhoneNumber("  +573004005060  ");
+        user.setPassword("  secret  ");
+
+        // Act
         UserHelper.normalizeUser(user);
+
+        // Assert
         assertEquals("John", user.getFirstName());
         assertEquals("Doe", user.getLastName());
         assertEquals("john.doe@example.com", user.getEmail());
+        assertEquals("112233", user.getIdentityDocument());
+        assertEquals("+573004005060", user.getPhoneNumber());
+        assertEquals("secret", user.getPassword());
     }
 
-    @Test
-    void validateMandatoryFields_withNullFirstName_shouldThrowMissingFieldException() {
-        user.setFirstName(null);
+    @ParameterizedTest
+    @NullAndEmptySource
+    @ValueSource(strings = {" "})
+    void validateMandatoryFields_withBlankFirstName_shouldThrowMissingFieldException(String invalidName) {
+        user.setFirstName(invalidName);
         assertThrows(MissingFieldException.class, () -> UserHelper.validateMandatoryFields(user));
     }
 
     @Test
-    void validateMandatoryFields_withBlankLastName_shouldThrowMissingFieldException() {
-        user.setLastName(" ");
+    void validateMandatoryFields_withNullBirthDate_shouldThrowMissingFieldException() {
+        user.setBirthDate(null);
         assertThrows(MissingFieldException.class, () -> UserHelper.validateMandatoryFields(user));
     }
 
@@ -101,32 +121,56 @@ class UserHelperTest {
     }
 
     @Test
-    void validateAndAssignRole_withValidRole_shouldAssignRole() {
-        RoleModel fullRole = new RoleModel(1L, "TEST_ROLE", "A test role");
-        when(rolePersistencePort.findById(1L)).thenReturn(fullRole);
+    void assignOwnerRole_whenRoleExists_shouldAssignRoleToUser() {
+        RoleModel ownerRole = new RoleModel(2L, ROLE_OWNER, "Restaurant Owner");
+        when(rolePersistencePort.findByName(ROLE_OWNER)).thenReturn(ownerRole);
 
-        UserHelper.validateAndAssignRole(user, rolePersistencePort);
+        UserHelper.assignOwnerRole(user, rolePersistencePort);
 
-        assertEquals(fullRole, user.getRole());
-        assertEquals("TEST_ROLE", user.getRole().getName());
+        assertNotNull(user.getRole());
+        assertEquals(ROLE_OWNER, user.getRole().getName());
     }
 
     @Test
-    void validateAndAssignRole_withNullRoleIdObject_shouldThrowMissingFieldException() {
-        user.setRole(null);
-        assertThrows(MissingFieldException.class, () -> UserHelper.validateAndAssignRole(user, rolePersistencePort));
+    void assignOwnerRole_whenRoleNotFound_shouldThrowRoleNotFoundException() {
+        when(rolePersistencePort.findByName(ROLE_OWNER)).thenReturn(null);
+        assertThrows(RoleNotFoundException.class, () -> UserHelper.assignOwnerRole(user, rolePersistencePort));
     }
 
     @Test
-    void validateAndAssignRole_withNullRoleIdField_shouldThrowMissingFieldException() {
-        user.setRole(new RoleModel(null, null, null));
-        assertThrows(MissingFieldException.class, () -> UserHelper.validateAndAssignRole(user, rolePersistencePort));
+    void assignEmployeeRole_whenRoleExists_shouldAssignRoleToUser() {
+        RoleModel employeeRole = new RoleModel(3L, ROLE_EMPLOYEE, "Restaurant Employee");
+        when(rolePersistencePort.findByName(ROLE_EMPLOYEE)).thenReturn(employeeRole);
+
+        UserHelper.assignEmployeeRole(user, rolePersistencePort);
+
+        assertNotNull(user.getRole());
+        assertEquals(ROLE_EMPLOYEE, user.getRole().getName());
     }
 
     @Test
-    void validateAndAssignRole_withInvalidRoleId_shouldThrowInvalidRoleException() {
-        when(rolePersistencePort.findById(99L)).thenReturn(null);
-        user.setRole(new RoleModel(99L, null, null));
-        assertThrows(InvalidRoleException.class, () -> UserHelper.validateAndAssignRole(user, rolePersistencePort));
+    void assignEmployeeRole_whenRoleNotFound_shouldThrowRoleNotFoundException() {
+        when(rolePersistencePort.findByName(ROLE_EMPLOYEE)).thenReturn(null);
+        assertThrows(RoleNotFoundException.class, () -> UserHelper.assignEmployeeRole(user, rolePersistencePort));
+    }
+
+    @Test
+    void validateRoleIsAdmin_withAdminRole_shouldNotThrowException() {
+        assertDoesNotThrow(() -> UserHelper.validateRoleIsAdmin(ROLE_ADMIN));
+    }
+
+    @Test
+    void validateRoleIsAdmin_withNonAdminRole_shouldThrowForbiddenException() {
+        assertThrows(ForbiddenException.class, () -> UserHelper.validateRoleIsAdmin(ROLE_OWNER));
+    }
+
+    @Test
+    void validateRoleIsOwner_withOwnerRole_shouldNotThrowException() {
+        assertDoesNotThrow(() -> UserHelper.validateRoleIsOwner(ROLE_OWNER));
+    }
+
+    @Test
+    void validateRoleIsOwner_withNonOwnerRole_shouldThrowForbiddenException() {
+        assertThrows(ForbiddenException.class, () -> UserHelper.validateRoleIsOwner(ROLE_ADMIN));
     }
 }

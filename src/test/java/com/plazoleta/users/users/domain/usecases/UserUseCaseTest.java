@@ -1,5 +1,6 @@
 package com.plazoleta.users.users.domain.usecases;
 
+import com.plazoleta.users.users.domain.exceptions.ForbiddenException;
 import com.plazoleta.users.users.domain.exceptions.UserNotFoundException;
 import com.plazoleta.users.users.domain.model.RoleModel;
 import com.plazoleta.users.users.domain.model.UserModel;
@@ -16,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
@@ -33,12 +35,12 @@ class UserUseCaseTest {
     private UserUseCase userUseCase;
 
     private UserModel userModel;
-    private RoleModel roleModel;
+    private static final String ROLE_ADMIN = "ADMINISTRADOR";
+    private static final String ROLE_OWNER = "PROPIETARIO";
+    private static final String ROLE_EMPLOYEE = "EMPLEADO";
 
     @BeforeEach
     void setUp() {
-        roleModel = new RoleModel(2L, "CLIENTE", "Rol para clientes");
-
         userModel = new UserModel();
         userModel.setFirstName("John");
         userModel.setLastName("Doe");
@@ -47,25 +49,67 @@ class UserUseCaseTest {
         userModel.setBirthDate(LocalDate.of(2000, 1, 1));
         userModel.setEmail("john.doe@example.com");
         userModel.setPassword("Password123");
-        userModel.setRole(new RoleModel(2L, null, null));
     }
 
     @Test
-    void registerUser_happyPath_shouldCallPortsAndSaveUser() {
+    void registerUser_asAdmin_shouldCreateOwnerUserSuccessfully() {
+        RoleModel ownerRole = new RoleModel(2L, ROLE_OWNER, "Rol para propietarios");
+        when(rolePersistencePort.findByName(ROLE_OWNER)).thenReturn(ownerRole);
+        when(passwordEncoderPort.encode("Password123")).thenReturn("encodedPassword");
         when(userPersistencePort.getUserByDocument(anyString())).thenReturn(null);
         when(userPersistencePort.getUserByEmail(anyString())).thenReturn(null);
-        when(rolePersistencePort.findById(2L)).thenReturn(roleModel);
-        when(passwordEncoderPort.encode("Password123")).thenReturn("encodedPassword");
 
-        userUseCase.registerUser(userModel);
+        userUseCase.registerUser(userModel, ROLE_ADMIN);
 
         ArgumentCaptor<UserModel> userCaptor = ArgumentCaptor.forClass(UserModel.class);
-        verify(passwordEncoderPort).encode("Password123");
         verify(userPersistencePort).saveUser(userCaptor.capture());
-
         UserModel capturedUser = userCaptor.getValue();
+
         assertEquals("encodedPassword", capturedUser.getPassword());
-        assertEquals(roleModel, capturedUser.getRole());
+        assertEquals(ownerRole, capturedUser.getRole());
+        assertEquals(ROLE_OWNER, capturedUser.getRole().getName());
+        verify(passwordEncoderPort).encode("Password123");
+    }
+
+    @Test
+    void registerUser_asNonAdmin_shouldThrowForbiddenException() {
+        assertThrows(ForbiddenException.class, () -> {
+            userUseCase.registerUser(userModel, ROLE_OWNER);
+        });
+
+        verify(userPersistencePort, never()).saveUser(any());
+        verify(passwordEncoderPort, never()).encode(anyString());
+    }
+
+    @Test
+    void createEmployeeByOwner_asOwner_shouldCreateEmployeeSuccessfully() {
+        RoleModel employeeRole = new RoleModel(3L, ROLE_EMPLOYEE, "Rol para empleados");
+        UserModel employeeModel = userModel;
+        Long ownerId = 1L;
+
+        when(rolePersistencePort.findByName(ROLE_EMPLOYEE)).thenReturn(employeeRole);
+        when(passwordEncoderPort.encode(anyString())).thenReturn("encodedPasswordForEmployee");
+        when(userPersistencePort.getUserByDocument(anyString())).thenReturn(null);
+        when(userPersistencePort.getUserByEmail(anyString())).thenReturn(null);
+
+        userUseCase.createEmployeeByOwner(employeeModel, ownerId, ROLE_OWNER);
+
+        ArgumentCaptor<UserModel> userCaptor = ArgumentCaptor.forClass(UserModel.class);
+        verify(userPersistencePort).saveUser(userCaptor.capture());
+        UserModel capturedUser = userCaptor.getValue();
+
+        assertEquals("encodedPasswordForEmployee", capturedUser.getPassword());
+        assertEquals(employeeRole, capturedUser.getRole());
+        assertEquals(ROLE_EMPLOYEE, capturedUser.getRole().getName());
+    }
+
+    @Test
+    void createEmployeeByOwner_asNonOwner_shouldThrowForbiddenException() {
+        assertThrows(ForbiddenException.class, () -> {
+            userUseCase.createEmployeeByOwner(userModel, 1L, ROLE_ADMIN);
+        });
+
+        verify(userPersistencePort, never()).saveUser(any());
     }
 
     @Test

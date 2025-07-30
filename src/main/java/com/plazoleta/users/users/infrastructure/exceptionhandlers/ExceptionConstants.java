@@ -15,5 +15,7 @@ public class ExceptionConstants {
     public static final String INVALID_ROLE_MESSAGE = "El rol proporcionado no es válido.";
     public static final String USER_NOT_FOUND_MESSAGE = "El usuario con el ID proporcionado no fue encontrado.";
     public static final String INVALID_CREDENTIALS_MESSAGE = "Correo o contraseña incorrectos.";
+    public static final String FORBIDDEN_MESSAGE = "No tiene permisos para realizar esta acción.";
+    public static final String ROLE_NOT_FOUND_MESSAGE = "El rol especificado no fue encontrado.";
 }
 

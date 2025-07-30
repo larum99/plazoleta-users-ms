@@ -17,4 +17,9 @@ public class RoleValidatorAdapter implements RoleValidatorPort {
     public String extractRole(String token) {
         return jwtUtil.extractRole(token);
     }
+
+    @Override
+    public Long extractUserId(String token) {
+        return jwtUtil.extractId(token);
+    }
 }
