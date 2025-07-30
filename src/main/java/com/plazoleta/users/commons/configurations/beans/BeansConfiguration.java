@@ -1,9 +1,11 @@
 package com.plazoleta.users.commons.configurations.beans;
 
+import com.plazoleta.users.users.domain.ports.in.AuthenticationServicePort;
 import com.plazoleta.users.users.domain.ports.in.UserServicePort;
 import com.plazoleta.users.users.domain.ports.out.PasswordEncoderPort;
 import com.plazoleta.users.users.domain.ports.out.RolePersistencePort;
 import com.plazoleta.users.users.domain.ports.out.UserPersistencePort;
+import com.plazoleta.users.users.domain.usecases.AuthenticationUseCase;
 import com.plazoleta.users.users.domain.usecases.UserUseCase;
 import com.plazoleta.users.users.infrastructure.adapters.encoders.PasswordEncoderAdapter;
 import com.plazoleta.users.users.infrastructure.adapters.persistence.RolePersistenceAdapter;
@@ -47,5 +49,10 @@ public class BeansConfiguration {
     @Bean
     public PasswordEncoderPort passwordEncoderPort() {
         return new PasswordEncoderAdapter();
+    }
+
+    @Bean
+    public AuthenticationServicePort authenticationServicePort() {
+        return new AuthenticationUseCase(userPersistencePort(), passwordEncoderPort());
     }
 }
