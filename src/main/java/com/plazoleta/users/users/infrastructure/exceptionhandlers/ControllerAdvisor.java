@@ -65,4 +65,10 @@ public class ControllerAdvisor {
                 ex.getMessage() != null ? ex.getMessage() : ExceptionConstants.USER_NOT_FOUND_MESSAGE,
                 LocalDateTime.now()));
     }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<ExceptionResponse> handleInvalidCredentials(InvalidCredentialsException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ExceptionResponse(
+                ExceptionConstants.INVALID_CREDENTIALS_MESSAGE, LocalDateTime.now()));
+    }
 }
