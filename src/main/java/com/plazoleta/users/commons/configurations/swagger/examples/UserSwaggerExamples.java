@@ -14,8 +14,7 @@ public class UserSwaggerExamples {
           "phoneNumber": "3123456789",
           "birthDate": "1995-11-20",
           "email": "carlos.ramirez@plazoleta.com",
-          "password": "miContraseñaSegura123",
-          "roleId": 1
+          "password": "miContraseñaSegura123"
         }
     """;
 
@@ -25,6 +24,7 @@ public class UserSwaggerExamples {
           "time": "2025-07-24T12:30:00"
         }
     """;
+
 
     public static final String USER_ALREADY_EXISTS_RESPONSE = """
         {
@@ -52,5 +52,4 @@ public class UserSwaggerExamples {
             "time": "2025-07-27T14:45:00"
         }
     """;
-
 }

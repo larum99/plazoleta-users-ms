@@ -70,17 +70,33 @@ public class UserHelper {
         }
     }
 
-    public static void validateAndAssignRole(UserModel userModel, RolePersistencePort rolePort) {
-        if (userModel.getRole() == null || userModel.getRole().getId() == null) {
-            throw new MissingFieldException(DomainConstants.ERROR_REQUIRED_ROLE_ID);
-        }
-
-        RoleModel role = rolePort.findById(userModel.getRole().getId());
+    public static void assignOwnerRole(UserModel user, RolePersistencePort rolePersistencePort) {
+        RoleModel role = rolePersistencePort.findByName(DomainConstants.ROLE_OWNER);
         if (role == null) {
-            throw new InvalidRoleException();
+            throw new RoleNotFoundException();
+        }
+        user.setRole(role);
+    }
+
+    public static void assignEmployeeRole(UserModel user, RolePersistencePort rolePersistencePort) {
+        RoleModel role = rolePersistencePort.findByName(DomainConstants.ROLE_EMPLOYEE);
+        if (role == null) {
+            throw new RoleNotFoundException();
         }
 
-        userModel.setRole(role);
+        user.setRole(role);
+    }
+
+    public static void validateRoleIsOwner(String role) {
+        if (!DomainConstants.ROLE_OWNER.equalsIgnoreCase(role)) {
+            throw new ForbiddenException();
+        }
+    }
+
+    public static void validateRoleIsAdmin(String role) {
+        if (!DomainConstants.ROLE_ADMIN.equalsIgnoreCase(role)) {
+            throw new ForbiddenException();
+        }
     }
 
     private static boolean isBlank(String value) {

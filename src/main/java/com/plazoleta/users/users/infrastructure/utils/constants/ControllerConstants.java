@@ -7,9 +7,15 @@ public class ControllerConstants {
     }
 
     public static final String BASE_URL = "/api/v1/users";
-    public static final String SAVE_PATH = "/";
+    public static final String OWNER_SAVE_PATH = "/owners";
     public static final String TAG = "Usuarios";
     public static final String TAG_DESCRIPTION = "Operaciones relacionadas con los usuarios";
     public static final String GET_BY_ID_PATH = "/{id}";
     public static final String LOGIN_PATH = "/auth/login";
+
+    public static final String ROLE_ADMIN = "hasRole('ADMINISTRADOR')";
+    public static final String ROLE_OWNER = "hasRole('PROPIETARIO')";
+    public static final String BEARER_PREFIX = "Bearer ";
+
+    public static final String SAVE_EMPLOYEE_PATH = "/employees";
 }

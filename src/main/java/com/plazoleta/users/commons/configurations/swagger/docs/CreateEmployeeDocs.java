@@ -3,7 +3,6 @@ package com.plazoleta.users.commons.configurations.swagger.docs;
 import com.plazoleta.users.commons.configurations.swagger.examples.UserSwaggerExamples;
 import com.plazoleta.users.users.application.dto.request.SaveUserRequest;
 import com.plazoleta.users.users.application.dto.response.SaveUserResponse;
-import com.plazoleta.users.users.application.dto.response.UserResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -17,22 +16,22 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-public class UserControllerDocs {
+public class CreateEmployeeDocs {
 
     @Target({ElementType.METHOD})
     @Retention(RetentionPolicy.RUNTIME)
     @Operation(
-            summary = SwaggerConstants.SUMMARY_CREATE_USER_OWNER,
-            description = SwaggerConstants.DESCRIPTION_CREATE_USER_OWNER,
+            summary = SwaggerConstants.SUMMARY_CREATE_EMPLOYEE,
+            description = SwaggerConstants.DESCRIPTION_CREATE_EMPLOYEE,
             requestBody = @RequestBody(
-                    description = SwaggerConstants.DESCRIPTION_CREATE_USER_OWNER,
+                    description = SwaggerConstants.DESCRIPTION_CREATE_EMPLOYEE,
                     required = true,
                     content = @Content(
                             mediaType = SwaggerConstants.APPLICATION_JSON,
                             schema = @Schema(implementation = SaveUserRequest.class),
                             examples = @ExampleObject(
                                     name = SwaggerConstants.EXAMPLE_NAME_CREATE_REQUEST,
-                                    summary = SwaggerConstants.SUMMARY_CREATE_USER_EXAMPLE,
+                                    summary = SwaggerConstants.SUMMARY_CREATE_EMPLOYEE_EXAMPLE,
                                     value = UserSwaggerExamples.CREATE_USER_REQUEST
                             )
                     )
@@ -41,13 +40,13 @@ public class UserControllerDocs {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = SwaggerConstants.OK,
-                    description = SwaggerConstants.DESCRIPTION_CREATE_USER_SUCCESS,
+                    description = SwaggerConstants.DESCRIPTION_CREATE_EMPLOYEE_SUCCESS,
                     content = @Content(
                             mediaType = SwaggerConstants.APPLICATION_JSON,
                             schema = @Schema(implementation = SaveUserResponse.class),
                             examples = @ExampleObject(
                                     name = SwaggerConstants.EXAMPLE_NAME_SUCCESS,
-                                    summary = SwaggerConstants.SUMMARY_USER_CREATED,
+                                    summary = SwaggerConstants.SUMMARY_EMPLOYEE_CREATED,
                                     value = UserSwaggerExamples.USER_CREATED_RESPONSE
                             )
                     )
@@ -65,42 +64,6 @@ public class UserControllerDocs {
                     )
             )
     })
-    public @interface CreateUserDocs {
-    }
-
-    @Target({ElementType.METHOD})
-    @Retention(RetentionPolicy.RUNTIME)
-    @Operation(
-            summary = SwaggerConstants.SUMMARY_GET_USER_BY_ID,
-            description = SwaggerConstants.DESCRIPTION_GET_USER_BY_ID
-    )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = SwaggerConstants.CREATED,
-                    description = SwaggerConstants.DESCRIPTION_USER_FOUND,
-                    content = @Content(
-                            mediaType = SwaggerConstants.APPLICATION_JSON,
-                            schema = @Schema(implementation = UserResponse.class),
-                            examples = @ExampleObject(
-                                    name = SwaggerConstants.EXAMPLE_NAME_SUCCESS,
-                                    summary = SwaggerConstants.SUMMARY_USER_DATA,
-                                    value = UserSwaggerExamples.USER_FOUND_RESPONSE
-                            )
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = SwaggerConstants.NOT_FOUND,
-                    description = SwaggerConstants.DESCRIPTION_USER_NOT_FOUND,
-                    content = @Content(
-                            mediaType = SwaggerConstants.APPLICATION_JSON,
-                            examples = @ExampleObject(
-                                    name = SwaggerConstants.EXAMPLE_NAME_NOT_FOUND,
-                                    summary = SwaggerConstants.SUMMARY_USER_NOT_FOUND,
-                                    value = UserSwaggerExamples.USER_NOT_FOUND_RESPONSE
-                            )
-                    )
-            )
-    })
-    public @interface GetUserByIdDocs {
+    public @interface CreateEmployee {
     }
 }

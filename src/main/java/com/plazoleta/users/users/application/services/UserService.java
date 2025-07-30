@@ -4,5 +4,7 @@ import com.plazoleta.users.users.application.dto.request.SaveUserRequest;
 import com.plazoleta.users.users.application.dto.response.SaveUserResponse;
 
 public interface UserService {
-    SaveUserResponse saveUser(SaveUserRequest request);
+    SaveUserResponse saveOwnerByAdmin(SaveUserRequest request, String token);
+    SaveUserResponse saveEmployeeByOwner(SaveUserRequest request, String token);
+
 }
