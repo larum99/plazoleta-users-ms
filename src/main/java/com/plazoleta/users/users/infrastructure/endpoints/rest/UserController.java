@@ -51,7 +51,7 @@ public class UserController {
 
     @CreateEmployee
     @PostMapping(SAVE_EMPLOYEE_PATH)
-    @PreAuthorize(ControllerConstants.ROLE_OWNER)
+    @PreAuthorize("hasRole('PROPIETARIO')")
     public ResponseEntity<SaveUserResponse> saveEmployee(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader,
             @RequestBody SaveUserRequest request) {

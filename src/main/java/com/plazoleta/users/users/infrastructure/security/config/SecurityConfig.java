@@ -1,6 +1,7 @@
 package com.plazoleta.users.users.infrastructure.security.config;
 
 import com.plazoleta.users.users.infrastructure.security.filters.JwtAuthenticationFilter;
+import com.plazoleta.users.users.infrastructure.security.handlers.CustomAccessDeniedHandler;
 import com.plazoleta.users.users.infrastructure.security.utils.JwtUtil;
 import com.plazoleta.users.users.infrastructure.security.utils.SecurityConstants;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig {
 
     private final JwtUtil jwtUtil;
+    private final CustomAccessDeniedHandler accessDeniedHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -40,9 +42,13 @@ public class SecurityConfig {
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
+                .exceptionHandling(exception -> exception
+                        .accessDeniedHandler(accessDeniedHandler)
+                )
                 .addFilterBefore(new JwtAuthenticationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
+
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
