@@ -23,4 +23,5 @@ public class DomainConstants {
 
     public static final String ROLE_OWNER = "PROPIETARIO";
 
+    public static final String ROLE_CLIENT = "CLIENTE";
 }

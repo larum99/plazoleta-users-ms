@@ -1,6 +1,7 @@
 package com.plazoleta.users.users.infrastructure.endpoints.rest;
 
-import com.plazoleta.users.commons.configurations.swagger.docs.CreateEmployeeDocs.CreateEmployee;
+import com.plazoleta.users.commons.configurations.swagger.docs.ClientControllerDocs.CreateClientDocs;
+import com.plazoleta.users.commons.configurations.swagger.docs.EmployeeControllerDocs.CreateEmployee;
 import com.plazoleta.users.commons.configurations.swagger.docs.UserControllerDocs.*;
 import com.plazoleta.users.users.application.dto.request.SaveUserRequest;
 import com.plazoleta.users.users.application.dto.response.SaveUserResponse;
@@ -9,7 +10,6 @@ import com.plazoleta.users.users.application.mappers.UserDtoMapper;
 import com.plazoleta.users.users.application.services.UserService;
 import com.plazoleta.users.users.domain.model.UserModel;
 import com.plazoleta.users.users.domain.ports.in.UserServicePort;
-import com.plazoleta.users.users.infrastructure.utils.constants.ControllerConstants;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -61,4 +61,10 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    @CreateClientDocs
+    @PostMapping("/client")
+    public ResponseEntity<SaveUserResponse> saveClient(@RequestBody SaveUserRequest request) {
+        SaveUserResponse response = userService.saveClient(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
 }

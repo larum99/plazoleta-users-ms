@@ -52,4 +52,25 @@ public class UserSwaggerExamples {
             "time": "2025-07-27T14:45:00"
         }
     """;
+
+    public static final String CREATE_CLIENT_REQUEST = """
+        {
+             "firstName": "Laura",
+             "lastName": "Gómez",
+             "identityDocument": "1122334455",
+             "phoneNumber": "3001234567",
+             "email": "laura.gomez@example.com",
+             "password": "clienteSeguro123",
+             "birthDate": "1995-04-23"
+        }
+    """;
+
+    public static final String CLIENT_CREATED_RESPONSE = """
+        {
+            "id": 5,
+            "email": "laura.gomez@example.com",
+            "role": "CLIENTE"
+        }
+    """;
+
 }

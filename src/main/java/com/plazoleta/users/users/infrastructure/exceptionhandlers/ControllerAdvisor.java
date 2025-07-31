@@ -41,8 +41,8 @@ public class ControllerAdvisor {
                 ExceptionConstants.USER_ALREADY_EMAIL_EXISTS_MESSAGE, LocalDateTime.now()));
     }
 
-    @ExceptionHandler(DuplicateDocumentException.class)
-    public ResponseEntity<ExceptionResponse> handleDuplicateDocument(DuplicateDocumentException ex) {
+    @ExceptionHandler(DuplicatedDocumentException.class)
+    public ResponseEntity<ExceptionResponse> handleDuplicateDocument(DuplicatedDocumentException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(
                 ExceptionConstants.USER_ALREADY_DOCUMENTID_EXISTS_MESSAGE, LocalDateTime.now()));
     }

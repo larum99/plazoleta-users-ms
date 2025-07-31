@@ -40,4 +40,11 @@ public class UserServiceImpl implements UserService {
 
         return new SaveUserResponse(Constants.SAVE_USER_RESPONSE_MESSAGE, LocalDateTime.now());
     }
+
+    @Override
+    public SaveUserResponse saveClient(SaveUserRequest request) {
+        UserModel clientModel = userDtoMapper.requestToModel(request);
+        userServicePort.registerClient(clientModel);
+        return new SaveUserResponse(Constants.SAVE_USER_RESPONSE_MESSAGE, LocalDateTime.now());
+    }
 }
