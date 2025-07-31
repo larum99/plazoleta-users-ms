@@ -60,7 +60,7 @@ public class UserHelper {
 
     public static void checkIfDocumentExists(String document, UserPersistencePort userPort) {
         if (userPort.getUserByDocument(document) != null) {
-            throw new DuplicateDocumentException();
+            throw new DuplicatedDocumentException();
         }
     }
 
@@ -106,4 +106,13 @@ public class UserHelper {
     private static String trim(String value) {
         return value == null ? null : value.trim();
     }
+
+    public static void assignClientRole(UserModel user, RolePersistencePort rolePersistencePort) {
+        RoleModel role = rolePersistencePort.findByName(DomainConstants.ROLE_CLIENT);
+        if (role == null) {
+            throw new RoleNotFoundException();
+        }
+        user.setRole(role);
+    }
+
 }

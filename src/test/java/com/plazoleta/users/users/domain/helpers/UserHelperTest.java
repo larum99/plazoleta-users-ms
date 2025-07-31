@@ -110,7 +110,7 @@ class UserHelperTest {
     @Test
     void checkIfDocumentExists_whenDocumentExists_shouldThrowDuplicateDocumentException() {
         when(userPersistencePort.getUserByDocument("12345678")).thenReturn(new UserModel());
-        assertThrows(DuplicateDocumentException.class, () -> UserHelper.checkIfDocumentExists("12345678", userPersistencePort));
+        assertThrows(DuplicatedDocumentException.class, () -> UserHelper.checkIfDocumentExists("12345678", userPersistencePort));
     }
 
     @Test
@@ -172,4 +172,23 @@ class UserHelperTest {
     void validateRoleIsOwner_withNonOwnerRole_shouldThrowForbiddenException() {
         assertThrows(ForbiddenException.class, () -> UserHelper.validateRoleIsOwner(ROLE_ADMIN));
     }
+
+    @Test
+    void assignClientRole_whenRoleExists_shouldAssignRoleToUser() {
+        RoleModel clientRole = new RoleModel(4L, DomainConstants.ROLE_CLIENT, "Regular Client");
+        when(rolePersistencePort.findByName(DomainConstants.ROLE_CLIENT)).thenReturn(clientRole);
+
+        UserHelper.assignClientRole(user, rolePersistencePort);
+
+        assertNotNull(user.getRole());
+        assertEquals(DomainConstants.ROLE_CLIENT, user.getRole().getName());
+    }
+
+    @Test
+    void assignClientRole_whenRoleNotFound_shouldThrowRoleNotFoundException() {
+        when(rolePersistencePort.findByName(DomainConstants.ROLE_CLIENT)).thenReturn(null);
+
+        assertThrows(RoleNotFoundException.class, () -> UserHelper.assignClientRole(user, rolePersistencePort));
+    }
+
 }

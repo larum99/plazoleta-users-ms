@@ -69,4 +69,24 @@ public class UserUseCase implements UserServicePort {
 
         userPersistencePort.saveUser(employee);
     }
+
+    @Override
+    public void registerClient(UserModel userModel) {
+        UserHelper.normalizeUser(userModel);
+
+        UserHelper.validateMandatoryFields(userModel);
+        UserHelper.validateEmail(userModel.getEmail());
+        UserHelper.validatePhone(userModel.getPhoneNumber());
+        UserHelper.validateDocument(userModel.getIdentityDocument());
+
+        UserHelper.checkIfDocumentExists(userModel.getIdentityDocument(), userPersistencePort);
+        UserHelper.checkIfEmailExists(userModel.getEmail(), userPersistencePort);
+
+        UserHelper.assignClientRole(userModel, rolePersistencePort);
+
+        String encryptedPassword = passwordEncoderPort.encode(userModel.getPassword());
+        userModel.setPassword(encryptedPassword);
+
+        userPersistencePort.saveUser(userModel);
+    }
 }

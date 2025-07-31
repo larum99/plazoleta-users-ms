@@ -61,5 +61,8 @@ public class SwaggerConstants {
     public static final String SUMMARY_CREATE_EMPLOYEE_EXAMPLE = "Ejemplo de creación de empleado";
     public static final String SUMMARY_EMPLOYEE_CREATED = "Empleado creado exitosamente";
     public static final String DESCRIPTION_CREATE_EMPLOYEE_SUCCESS = "Empleado creado correctamente en la base de datos.";
+    public static final String SUMMARY_CREATE_USER_CLIENT = "Crear cuenta de cliente";
+    public static final String DESCRIPTION_CREATE_USER_CLIENT = "Permite registrar un nuevo cliente con los datos obligatorios";
+
 
 }

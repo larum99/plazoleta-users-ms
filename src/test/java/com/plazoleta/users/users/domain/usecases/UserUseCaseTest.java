@@ -1,5 +1,6 @@
 package com.plazoleta.users.users.domain.usecases;
 
+import com.plazoleta.users.users.domain.exceptions.DuplicatedDocumentException;
 import com.plazoleta.users.users.domain.exceptions.ForbiddenException;
 import com.plazoleta.users.users.domain.exceptions.UserNotFoundException;
 import com.plazoleta.users.users.domain.model.RoleModel;
@@ -132,5 +133,33 @@ class UserUseCaseTest {
 
         assertThrows(UserNotFoundException.class, () -> userUseCase.getUserById(userId));
         verify(userPersistencePort).getUserById(userId);
+    }
+
+    @Test
+    void registerClient_shouldRegisterSuccessfully() {
+        RoleModel clientRole = new RoleModel(4L, "CLIENTE", "Rol para clientes");
+
+        when(rolePersistencePort.findByName("CLIENTE")).thenReturn(clientRole);
+        when(userPersistencePort.getUserByDocument(anyString())).thenReturn(null);
+        when(userPersistencePort.getUserByEmail(anyString())).thenReturn(null);
+        when(passwordEncoderPort.encode(anyString())).thenReturn("encodedClientPassword");
+
+        userUseCase.registerClient(userModel);
+
+        ArgumentCaptor<UserModel> userCaptor = ArgumentCaptor.forClass(UserModel.class);
+        verify(userPersistencePort).saveUser(userCaptor.capture());
+
+        UserModel capturedUser = userCaptor.getValue();
+        assertEquals("encodedClientPassword", capturedUser.getPassword());
+        assertEquals("CLIENTE", capturedUser.getRole().getName());
+        assertNotNull(capturedUser.getRole());
+    }
+
+    @Test
+    void registerClient_withExistingDocument_shouldThrowDuplicatedDocumentException() {
+        when(userPersistencePort.getUserByDocument(userModel.getIdentityDocument())).thenReturn(new UserModel());
+
+        assertThrows(DuplicatedDocumentException.class, () -> userUseCase.registerClient(userModel));
+        verify(userPersistencePort, never()).saveUser(any());
     }
 }
