@@ -32,7 +32,7 @@ public class UserController {
 
     @CreateUserDocs
     @PostMapping(OWNER_SAVE_PATH)
-    @PreAuthorize(ControllerConstants.ROLE_ADMIN)
+    @PreAuthorize(ROLE_ADMIN)
     public ResponseEntity<SaveUserResponse> saveUser(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader,
             @RequestBody SaveUserRequest request) {
@@ -51,7 +51,7 @@ public class UserController {
 
     @CreateEmployee
     @PostMapping(SAVE_EMPLOYEE_PATH)
-    @PreAuthorize("hasRole('PROPIETARIO')")
+    @PreAuthorize(ROLE_OWNER)
     public ResponseEntity<SaveUserResponse> saveEmployee(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader,
             @RequestBody SaveUserRequest request) {

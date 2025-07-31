@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService {
         String role = roleValidatorPort.extractRole(token);
 
         UserModel userModel = userDtoMapper.requestToModel(request);
-        userServicePort.registerUser(userModel, role);
+        userServicePort.registerOwner(userModel, role);
         return new SaveUserResponse(Constants.SAVE_USER_RESPONSE_MESSAGE, LocalDateTime.now());
     }
 
