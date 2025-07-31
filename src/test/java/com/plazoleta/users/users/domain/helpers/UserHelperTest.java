@@ -28,7 +28,6 @@ class UserHelperTest {
     private RolePersistencePort rolePersistencePort;
 
     private UserModel user;
-    // Asumiendo los valores de DomainConstants para las pruebas
     private static final String ROLE_ADMIN = "ADMINISTRADOR";
     private static final String ROLE_OWNER = "PROPIETARIO";
     private static final String ROLE_EMPLOYEE = "EMPLEADO";

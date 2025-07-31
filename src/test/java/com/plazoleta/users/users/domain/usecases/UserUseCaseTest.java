@@ -59,7 +59,7 @@ class UserUseCaseTest {
         when(userPersistencePort.getUserByDocument(anyString())).thenReturn(null);
         when(userPersistencePort.getUserByEmail(anyString())).thenReturn(null);
 
-        userUseCase.registerUser(userModel, ROLE_ADMIN);
+        userUseCase.registerOwner(userModel, ROLE_ADMIN);
 
         ArgumentCaptor<UserModel> userCaptor = ArgumentCaptor.forClass(UserModel.class);
         verify(userPersistencePort).saveUser(userCaptor.capture());
@@ -74,7 +74,7 @@ class UserUseCaseTest {
     @Test
     void registerUser_asNonAdmin_shouldThrowForbiddenException() {
         assertThrows(ForbiddenException.class, () -> {
-            userUseCase.registerUser(userModel, ROLE_OWNER);
+            userUseCase.registerOwner(userModel, ROLE_OWNER);
         });
 
         verify(userPersistencePort, never()).saveUser(any());

@@ -1,6 +1,6 @@
 package com.plazoleta.users.users.infrastructure.endpoints.rest;
 
-import com.plazoleta.users.commons.configurations.swagger.docs.AuthControllerDocs;
+import com.plazoleta.users.commons.configurations.swagger.docs.AuthControllerDocs.*;
 import com.plazoleta.users.users.application.dto.request.AuthenticationRequest;
 import com.plazoleta.users.users.application.dto.response.AuthenticationResponse;
 import com.plazoleta.users.users.application.services.AuthenticationService;
@@ -18,7 +18,7 @@ public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
 
-    @AuthControllerDocs.LoginDocs
+    @LoginDocs
     @PostMapping(ControllerConstants.LOGIN_PATH)
     public AuthenticationResponse authenticate(@RequestBody AuthenticationRequest authenticationRequest) {
         return authenticationService.authenticate(authenticationRequest);

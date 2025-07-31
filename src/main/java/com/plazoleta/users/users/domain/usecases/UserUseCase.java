@@ -23,7 +23,7 @@ public class UserUseCase implements UserServicePort {
     }
 
     @Override
-    public void registerUser(UserModel userModel, String role) {
+    public void registerOwner(UserModel userModel, String role) {
         UserHelper.validateRoleIsAdmin(role);
         UserHelper.normalizeUser(userModel);
 

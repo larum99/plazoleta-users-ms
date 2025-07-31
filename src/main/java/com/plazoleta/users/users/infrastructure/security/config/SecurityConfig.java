@@ -38,7 +38,8 @@ public class SecurityConfig {
                                 SecurityConstants.SWAGGER_UI_PATH,
                                 SecurityConstants.SWAGGER_UI_HTML_PATH,
                                 SecurityConstants.API_DOCS_PATH,
-                                SecurityConstants.API_DOCS_PATH_NO_SLASH
+                                SecurityConstants.API_DOCS_PATH_NO_SLASH,
+                                SecurityConstants.GET_BY_ID_PATH
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
