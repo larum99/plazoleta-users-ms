@@ -62,7 +62,7 @@ public class UserController {
     }
 
     @CreateClientDocs
-    @PostMapping("/client")
+    @PostMapping(SAVE_CLIENT_PATH)
     public ResponseEntity<SaveUserResponse> saveClient(@RequestBody SaveUserRequest request) {
         SaveUserResponse response = userService.saveClient(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
