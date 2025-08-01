@@ -18,4 +18,5 @@ public class ControllerConstants {
     public static final String BEARER_PREFIX = "Bearer ";
 
     public static final String SAVE_EMPLOYEE_PATH = "/employees";
+    public static final String SAVE_CLIENT_PATH = "/client";
 }
