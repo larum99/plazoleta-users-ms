@@ -3,6 +3,7 @@ package com.plazoleta.users.users.infrastructure.adapters.persistence;
 import com.plazoleta.users.users.domain.model.UserModel;
 import com.plazoleta.users.users.domain.ports.out.UserPersistencePort;
 import com.plazoleta.users.users.infrastructure.clients.feign.EmployeeRestaurantFeignClient;
+import com.plazoleta.users.users.infrastructure.clients.feign.dto.CreateEmployeeRestaurantRequest;
 import com.plazoleta.users.users.infrastructure.entities.UserEntity;
 import com.plazoleta.users.users.infrastructure.mappers.UserEntityMapper;
 import com.plazoleta.users.users.infrastructure.repositories.mysql.UserRepository;
@@ -61,6 +62,7 @@ public class UserPersistenceAdapter implements UserPersistencePort {
 
     @Override
     public void createEmployee(Long employeeId, Long restaurantId) {
-        employeeRestaurantClient.createEmployee(employeeId, restaurantId);
+        CreateEmployeeRestaurantRequest request = new CreateEmployeeRestaurantRequest(employeeId, restaurantId);
+        employeeRestaurantClient.createEmployee(request);
     }
 }

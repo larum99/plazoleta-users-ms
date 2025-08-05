@@ -87,31 +87,39 @@ class UserUseCaseTest {
         RoleModel employeeRole = new RoleModel(3L, ROLE_EMPLOYEE, "Rol para empleados");
         UserModel employeeModel = userModel;
         Long ownerId = 1L;
+        Long restaurantId = 100L;
 
         when(rolePersistencePort.findByName(ROLE_EMPLOYEE)).thenReturn(employeeRole);
         when(passwordEncoderPort.encode(anyString())).thenReturn("encodedPasswordForEmployee");
         when(userPersistencePort.getUserByDocument(anyString())).thenReturn(null);
         when(userPersistencePort.getUserByEmail(anyString())).thenReturn(null);
+        when(userPersistencePort.saveEmployee(any(UserModel.class), eq(restaurantId))).thenReturn(employeeModel);
 
-        userUseCase.createEmployeeByOwner(employeeModel, ownerId, ROLE_OWNER);
+        userUseCase.createEmployeeByOwner(employeeModel, ownerId, ROLE_OWNER, restaurantId);
 
         ArgumentCaptor<UserModel> userCaptor = ArgumentCaptor.forClass(UserModel.class);
-        verify(userPersistencePort).saveUser(userCaptor.capture());
+        verify(userPersistencePort).saveEmployee(userCaptor.capture(), eq(restaurantId));
+
         UserModel capturedUser = userCaptor.getValue();
 
         assertEquals("encodedPasswordForEmployee", capturedUser.getPassword());
         assertEquals(employeeRole, capturedUser.getRole());
         assertEquals(ROLE_EMPLOYEE, capturedUser.getRole().getName());
+
+        verify(userPersistencePort).createEmployee(capturedUser.getId(), restaurantId);
     }
+
 
     @Test
     void createEmployeeByOwner_asNonOwner_shouldThrowForbiddenException() {
+        Long restaurantId = 100L;
         assertThrows(ForbiddenException.class, () -> {
-            userUseCase.createEmployeeByOwner(userModel, 1L, ROLE_ADMIN);
+            userUseCase.createEmployeeByOwner(userModel, 1L, ROLE_ADMIN, restaurantId);
         });
 
-        verify(userPersistencePort, never()).saveUser(any());
+        verify(userPersistencePort, never()).saveEmployee(any(), anyLong());
     }
+
 
     @Test
     void getUserById_whenUserExists_shouldReturnUser() {
