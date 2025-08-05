@@ -51,7 +51,7 @@ public class UserUseCase implements UserServicePort {
     }
 
     @Override
-    public void createEmployeeByOwner(UserModel employee, Long ownerId, String role) {
+    public void createEmployeeByOwner(UserModel employee, Long ownerId, String role, Long restaurantId) {
         UserHelper.validateRoleIsOwner(role);
         UserHelper.validateMandatoryFields(employee);
         UserHelper.validateEmail(employee.getEmail());
@@ -67,7 +67,9 @@ public class UserUseCase implements UserServicePort {
         String encryptedPassword = passwordEncoderPort.encode(employee.getPassword());
         employee.setPassword(encryptedPassword);
 
-        userPersistencePort.saveUser(employee);
+        UserModel savedEmployee = userPersistencePort.saveEmployee(employee, restaurantId);
+
+        userPersistencePort.createEmployee(savedEmployee.getId(), restaurantId);
     }
 
     @Override

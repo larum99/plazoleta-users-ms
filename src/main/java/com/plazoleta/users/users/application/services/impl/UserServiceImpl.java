@@ -31,12 +31,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public SaveUserResponse saveEmployeeByOwner(SaveUserRequest request, String token) {
+    public SaveUserResponse saveEmployeeByOwner(SaveUserRequest request, String token, Long restaurantId) {
         Long ownerId = roleValidatorPort.extractUserId(token);
         String role = roleValidatorPort.extractRole(token);
         UserModel employeeModel = userDtoMapper.requestToModel(request);
 
-        userServicePort.createEmployeeByOwner(employeeModel, ownerId, role);
+        userServicePort.createEmployeeByOwner(employeeModel, ownerId, role, restaurantId);
 
         return new SaveUserResponse(Constants.SAVE_USER_RESPONSE_MESSAGE, LocalDateTime.now());
     }

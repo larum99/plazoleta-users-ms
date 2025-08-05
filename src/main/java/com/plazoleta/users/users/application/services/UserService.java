@@ -5,6 +5,6 @@ import com.plazoleta.users.users.application.dto.response.SaveUserResponse;
 
 public interface UserService {
     SaveUserResponse saveOwnerByAdmin(SaveUserRequest request, String token);
-    SaveUserResponse saveEmployeeByOwner(SaveUserRequest request, String token);
+    SaveUserResponse saveEmployeeByOwner(SaveUserRequest request, String token, Long restaurantId);
     SaveUserResponse saveClient(SaveUserRequest request);
 }

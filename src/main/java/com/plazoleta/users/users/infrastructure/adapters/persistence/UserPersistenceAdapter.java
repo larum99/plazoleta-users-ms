@@ -2,6 +2,8 @@ package com.plazoleta.users.users.infrastructure.adapters.persistence;
 
 import com.plazoleta.users.users.domain.model.UserModel;
 import com.plazoleta.users.users.domain.ports.out.UserPersistencePort;
+import com.plazoleta.users.users.infrastructure.clients.feign.EmployeeRestaurantFeignClient;
+import com.plazoleta.users.users.infrastructure.clients.feign.dto.CreateEmployeeRestaurantRequest;
 import com.plazoleta.users.users.infrastructure.entities.UserEntity;
 import com.plazoleta.users.users.infrastructure.mappers.UserEntityMapper;
 import com.plazoleta.users.users.infrastructure.repositories.mysql.UserRepository;
@@ -18,6 +20,7 @@ public class UserPersistenceAdapter implements UserPersistencePort {
 
     private final UserRepository userRepository;
     private final UserEntityMapper userEntityMapper;
+    private final EmployeeRestaurantFeignClient employeeRestaurantClient;
 
     @Override
     public void saveUser(UserModel userModel) {
@@ -48,5 +51,18 @@ public class UserPersistenceAdapter implements UserPersistencePort {
         } else {
             return Optional.empty();
         }
+    }
+
+    @Override
+    public UserModel saveEmployee(UserModel userModel, Long restaurantId) {
+        UserEntity entity = userEntityMapper.modelToEntity(userModel);
+        UserEntity savedEntity = userRepository.save(entity);
+        return userEntityMapper.entityToModel(savedEntity);
+    }
+
+    @Override
+    public void createEmployee(Long employeeId, Long restaurantId) {
+        CreateEmployeeRestaurantRequest request = new CreateEmployeeRestaurantRequest(employeeId, restaurantId);
+        employeeRestaurantClient.createEmployee(request);
     }
 }
