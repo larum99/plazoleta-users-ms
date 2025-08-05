@@ -9,4 +9,6 @@ public interface UserPersistencePort {
     UserModel getUserByEmail(String email);
     UserModel getUserByDocument(String identityDocument);
     Optional<UserModel> getUserById(Long id);
+    UserModel saveEmployee(UserModel userModel, Long restaurantId);
+    void createEmployee(Long employeeId, Long restaurantId);
 }

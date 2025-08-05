@@ -10,6 +10,7 @@ import com.plazoleta.users.users.domain.usecases.UserUseCase;
 import com.plazoleta.users.users.infrastructure.adapters.encoders.PasswordEncoderAdapter;
 import com.plazoleta.users.users.infrastructure.adapters.persistence.RolePersistenceAdapter;
 import com.plazoleta.users.users.infrastructure.adapters.persistence.UserPersistenceAdapter;
+import com.plazoleta.users.users.infrastructure.clients.feign.EmployeeRestaurantFeignClient;
 import com.plazoleta.users.users.infrastructure.mappers.RoleEntityMapper;
 import com.plazoleta.users.users.infrastructure.mappers.UserEntityMapper;
 import com.plazoleta.users.users.infrastructure.repositories.mysql.RoleRepository;
@@ -26,6 +27,7 @@ public class BeansConfiguration {
     private final RoleRepository roleRepository;
     private final UserEntityMapper userEntityMapper;
     private final RoleEntityMapper roleEntityMapper;
+    private final EmployeeRestaurantFeignClient employeeRestaurantClient;
 
     @Bean
     public UserServicePort userServicePort() {
@@ -38,7 +40,7 @@ public class BeansConfiguration {
 
     @Bean
     public UserPersistencePort userPersistencePort() {
-        return new UserPersistenceAdapter(userRepository, userEntityMapper);
+        return new UserPersistenceAdapter(userRepository, userEntityMapper, employeeRestaurantClient);
     }
 
     @Bean

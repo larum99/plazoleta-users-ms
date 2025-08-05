@@ -54,10 +54,11 @@ public class UserController {
     @PreAuthorize(ROLE_OWNER)
     public ResponseEntity<SaveUserResponse> saveEmployee(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader,
+            @RequestParam Long restaurantId,
             @RequestBody SaveUserRequest request) {
 
         String token = authorizationHeader.replace(BEARER_PREFIX, "");
-        SaveUserResponse response = userService.saveEmployeeByOwner(request, token);
+        SaveUserResponse response = userService.saveEmployeeByOwner(request, token, restaurantId);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
