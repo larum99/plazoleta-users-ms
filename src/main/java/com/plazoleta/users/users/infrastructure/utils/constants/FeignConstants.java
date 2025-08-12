@@ -9,5 +9,5 @@ public class FeignConstants {
     public static final String NAME_SERVICE = "plazoleta-service";
     public static final String URL_SERVICE = "${microservices.plazoleta.url}";
 
-    public static final String CREATE_EMPLOYEE_PATH = "/api/v1/employee-restaurant";
+    public static final String CREATE_EMPLOYEE_PATH = "/api/v1/plazoleta/employee-restaurant";
 }

@@ -1,6 +1,5 @@
 package com.plazoleta.users.users.infrastructure.security.utils;
 
-import java.security.PublicKey;
 import java.util.List;
 
 public class SecurityConstants {
